@@ -57,5 +57,13 @@ public class GdxExtensionEntity {
 	public GdxExtensionDependenciesEntity getDependenciesLatestVersion() {
 		return dependenciesLatestVersion;
 	}
+	
+	public boolean isSupportingStableVersion() {
+		return dependenciesStableVersion != null;
+	}
+	
+	public boolean isSupportingLatestVersion() {
+		return dependenciesLatestVersion != null;
+	}
 
 }

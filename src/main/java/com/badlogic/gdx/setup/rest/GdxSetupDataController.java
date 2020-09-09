@@ -31,6 +31,9 @@ public class GdxSetupDataController {
 		ConfigJson cfg = service.getConfig();
 		response.latestGdxVersion = cfg.getLatestGdxVersion();
 		response.stableGdxVersion = cfg.getStableGdxVersion();
+		
+		//TODO supported languages, projects, etc.
+		
 		response.officialExtensions = service.getOfficialExtensions();
 		response.thirdPartyExtensions = service.getThirdPartyExtensions();
 

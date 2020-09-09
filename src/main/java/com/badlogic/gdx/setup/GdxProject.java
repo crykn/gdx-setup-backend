@@ -28,7 +28,6 @@ public class GdxProject {
 		zipOutputStream.closeEntry();
 
 		zipOutputStream.close();
-
 	}
 
 }
