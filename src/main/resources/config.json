@@ -1,0 +1,8 @@
+{
+  "latestGdxVersion": "1.9.11",
+  "stableGdxVersion": "1.9.10",
+  "officialRepos": [],
+  "thirdPartyRepos": [
+    "crykn/libgdx-screenmanager"
+  ]
+}

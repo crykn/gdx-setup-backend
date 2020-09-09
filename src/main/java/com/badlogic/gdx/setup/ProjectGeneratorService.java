@@ -1,65 +1,59 @@
 package com.badlogic.gdx.setup;
 
-import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-import javax.imageio.ImageIO;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import com.badlogic.gdx.setup.GdxProject.GdxProjectData;
-
 @Service
 public class ProjectGeneratorService {
-	private ConcurrentHashMap<String, CachedProjects> generatedFiles = new ConcurrentHashMap<>();
-	private ConcurrentHashMap<String, List<GdxTemplateFile>> cachedVersionFilesRepo = new ConcurrentHashMap<>();
 
-	public String generateAndZipGdxProject(GdxProjectData projectData) throws Exception {
+	private static final int KEEP_GENERATED_PROJECTS_TIME = 1000 * 60 * 15; // ms
+	private static final int MAX_GEN_CACHE_SIZE = 5;
 
+	@Autowired
+	private GdxSetupDataService dataCacheService;
+	private ConcurrentHashMap<String, GeneratedProject> generatedFiles = new ConcurrentHashMap<>();
+
+	public String generateAndZipGdxProject(GdxSetupSettings projectSettings) throws Exception {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		ZipOutputStream zipOutputStream = new ZipOutputStream(baos);
 
-		new GdxProject().generateProject(projectData, cachedVersionFilesRepo, zipOutputStream);
+		new GdxProject().generateProject(projectSettings, dataCacheService.getTemplateFiles(projectSettings.useLatestGdxVersion), dataCacheService.getOfficialExtensions(),
+				dataCacheService.getThirdPartyExtensions(), zipOutputStream);
 
-		// this is generated completely dynamical
-		zipOutputStream.putNextEntry(new ZipEntry("build.gradle"));
-		zipOutputStream.write("FROM MRSTAHLFELGE WITH LOVE".getBytes());
-		zipOutputStream.closeEntry();
-
-		zipOutputStream.close();
-
-		clearCache();
+		// clearGenerationCache();
 
 		String uuid = UUID.randomUUID().toString();
-		generatedFiles.put(uuid, new CachedProjects(baos.toByteArray()));
+		generatedFiles.put(uuid, new GeneratedProject(baos.toByteArray()));
 
 		return uuid;
-
 	}
 
-	@Scheduled(fixedRate = 1000 * 60 * 5, initialDelay = 10000)
-	public void clearCache() {
+	@Scheduled(fixedRate = 1000 * 60 * 5, initialDelay = 10_000)
+	public void clearGenerationCache() {
 		List<String> uuids = new ArrayList<>(generatedFiles.keySet());
 
 		long timeNow = System.currentTimeMillis();
 		long oldestEntryTime = timeNow;
 		String oldestEntryUuid = null;
 
-		// remove everything older than 10 minutes
+		// remove everything older than 15 minutes
 		for (String uuid : uuids) {
-			CachedProjects project = generatedFiles.get(uuid);
+			GeneratedProject project = generatedFiles.get(uuid);
 
 			if (project != null) {
-				if (timeNow - project.timestamp > 1000 * 60 * 10)
+				if (timeNow - project.timestamp > KEEP_GENERATED_PROJECTS_TIME)
 					generatedFiles.remove(uuid);
-				else if (project.timestamp < oldestEntryTime && timeNow - project.timestamp > 1000 * 60 * 5) {
+				else if (project.timestamp < oldestEntryTime
+						&& timeNow - project.timestamp > KEEP_GENERATED_PROJECTS_TIME) {
 					oldestEntryUuid = uuid;
 					oldestEntryTime = project.timestamp;
 				}
@@ -67,23 +61,33 @@ public class ProjectGeneratorService {
 		}
 
 		// never more than 5 cached zip files at a time
-		if (generatedFiles.size() > 5 && oldestEntryUuid != null) {
+		if (generatedFiles.size() > MAX_GEN_CACHE_SIZE && oldestEntryUuid != null) {
 			generatedFiles.remove(oldestEntryUuid);
 		}
 	}
 
-	public CachedProjects getZipFile(String id) {
+	public GeneratedProject getGeneratedProject(String id) {
 		return generatedFiles.get(id);
 	}
 
-	public static class CachedProjects {
+	public static class GeneratedProject {
 		public final byte[] zippedContent;
 		public final long timestamp;
 
-		public CachedProjects(byte[] zipFile) {
+		public GeneratedProject(byte[] zipFile) {
 			this.zippedContent = zipFile;
 			timestamp = System.currentTimeMillis();
 		}
+	}
+
+	public static class GdxSetupSettings {
+		public boolean useLatestGdxVersion;
+		public boolean withAndroid;
+		public boolean withIos;
+		public boolean withHtml;
+		public boolean withDesktop;
+
+		public List<String> warnings = new LinkedList<>();
 	}
 
 }
