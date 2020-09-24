@@ -6,7 +6,7 @@ import java.util.ArrayList;
  * Depicts the dependencies needed for a specific version of a
  * {@linkplain GdxExtensionEntity libGDX extension}.
  */
-public class GdxExtensionDependenciesEntity {
+public class GdxExtensionStateEntity {
 	private ArrayList<String> incompatiblePlatforms = new ArrayList<>();
 
 	private ArrayList<String> core = new ArrayList<>();

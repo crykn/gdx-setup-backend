@@ -24,7 +24,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import com.badlgoic.gdx.setup.jpa.GdxExtensionDependenciesEntity;
+import com.badlgoic.gdx.setup.jpa.GdxExtensionStateEntity;
 import com.badlgoic.gdx.setup.jpa.GdxExtensionEntity;
 import com.badlgoic.gdx.setup.jpa.GdxTemplateFileEntity;
 import com.badlogic.gdx.setup.rest.NotFoundException;
@@ -120,12 +120,12 @@ public class GdxSetupDataService {
 		GdxExtensionJson extJson = json.fromJson(
 				downloadExtensionFile(extensionRepo, extensionRepo.getBranch("gdx_extension").getSHA1()),
 				GdxExtensionJson.class);
-		GdxExtensionDependenciesEntity stableDep = null;
-		GdxExtensionDependenciesEntity latestDep = null;
+		GdxExtensionStateEntity stableDep = null;
+		GdxExtensionStateEntity latestDep = null;
 
-		if (extJson.dependencies != null) {
-			stableDep = extJson.dependencies.get(stableVersion);
-			latestDep = extJson.dependencies.get(latestVersion);
+		if (extJson.states != null) {
+			stableDep = extJson.states.get(stableVersion);
+			latestDep = extJson.states.get(latestVersion);
 		}
 
 		GdxExtensionEntity ext = new GdxExtensionEntity(extJson.name, extJson.author, extJson.description,
@@ -214,7 +214,7 @@ public class GdxSetupDataService {
 
 		private int formatVersion;
 
-		private HashMap<String, GdxExtensionDependenciesEntity> dependencies;
+		private HashMap<String, GdxExtensionStateEntity> states;
 
 		public int getFormatVersion() {
 			return formatVersion;
@@ -236,8 +236,8 @@ public class GdxSetupDataService {
 			return projectUrl;
 		}
 
-		public HashMap<String, GdxExtensionDependenciesEntity> getDependencies() {
-			return dependencies;
+		public HashMap<String, GdxExtensionStateEntity> getStates() {
+			return states;
 		}
 	}
 

@@ -13,17 +13,17 @@ public class GdxExtensionEntity {
 	private String projectUrl;
 
 	@Nullable
-	private GdxExtensionDependenciesEntity dependenciesStableVersion;
+	private GdxExtensionStateEntity dependenciesStableVersion;
 	@Nullable
-	private GdxExtensionDependenciesEntity dependenciesLatestVersion;
+	private GdxExtensionStateEntity dependenciesLatestVersion;
 
 	public GdxExtensionEntity() {
 		// empty default constructor
 	}
 
 	public GdxExtensionEntity(String name, String author, String description, String projectUrl,
-			@Nullable GdxExtensionDependenciesEntity dependenciesStableVersion,
-			@Nullable GdxExtensionDependenciesEntity dependenciesLatestVersion) {
+			@Nullable GdxExtensionStateEntity dependenciesStableVersion,
+			@Nullable GdxExtensionStateEntity dependenciesLatestVersion) {
 		this.name = name;
 		this.author = author;
 		this.description = description;
@@ -49,12 +49,12 @@ public class GdxExtensionEntity {
 	}
 
 	@Nullable
-	public GdxExtensionDependenciesEntity getDependenciesStableVersion() {
+	public GdxExtensionStateEntity getDependenciesStableVersion() {
 		return dependenciesStableVersion;
 	}
 
 	@Nullable
-	public GdxExtensionDependenciesEntity getDependenciesLatestVersion() {
+	public GdxExtensionStateEntity getDependenciesLatestVersion() {
 		return dependenciesLatestVersion;
 	}
 	
