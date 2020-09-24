@@ -1,5 +1,7 @@
 package com.badlgoic.gdx.setup.jpa;
 
+import java.util.ArrayList;
+
 import javax.annotation.Nullable;
 
 /**
@@ -8,7 +10,7 @@ import javax.annotation.Nullable;
 public class GdxExtensionEntity {
 
 	private String name;
-	private String author;
+	private ArrayList<String> authors;
 	private String description;
 	private String projectUrl;
 
@@ -21,11 +23,11 @@ public class GdxExtensionEntity {
 		// empty default constructor
 	}
 
-	public GdxExtensionEntity(String name, String author, String description, String projectUrl,
+	public GdxExtensionEntity(String name, ArrayList<String> authors, String description, String projectUrl,
 			@Nullable GdxExtensionStateEntity dependenciesStableVersion,
 			@Nullable GdxExtensionStateEntity dependenciesLatestVersion) {
 		this.name = name;
-		this.author = author;
+		this.authors = authors;
 		this.description = description;
 		this.projectUrl = projectUrl;
 		this.dependenciesStableVersion = dependenciesStableVersion;
@@ -36,8 +38,8 @@ public class GdxExtensionEntity {
 		return name;
 	}
 
-	public String getAuthor() {
-		return author;
+	public ArrayList<String> getAuthors() {
+		return authors;
 	}
 
 	public String getDescription() {
@@ -57,11 +59,11 @@ public class GdxExtensionEntity {
 	public GdxExtensionStateEntity getDependenciesLatestVersion() {
 		return dependenciesLatestVersion;
 	}
-	
+
 	public boolean isSupportingStableVersion() {
 		return dependenciesStableVersion != null;
 	}
-	
+
 	public boolean isSupportingLatestVersion() {
 		return dependenciesLatestVersion != null;
 	}

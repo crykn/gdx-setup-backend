@@ -9,40 +9,46 @@ import java.util.ArrayList;
 public class GdxExtensionStateEntity {
 	private ArrayList<String> incompatiblePlatforms = new ArrayList<>();
 
-	private ArrayList<String> core = new ArrayList<>();
-	private ArrayList<String> desktop = new ArrayList<>();
-	private ArrayList<String> gwt = new ArrayList<>();
-	private ArrayList<String> android = new ArrayList<>();
-	private ArrayList<String> iOS = new ArrayList<>();
+	private ArrayList<String> coreDependencies = new ArrayList<>();
+	private ArrayList<String> desktopDependencies = new ArrayList<>();
+	private ArrayList<String> gwtDependencies = new ArrayList<>();
+	private ArrayList<String> androidDependencies = new ArrayList<>();
+	private ArrayList<String> iOSDependencies = new ArrayList<>();
 
 	private ArrayList<String> gwtInherits = new ArrayList<>();
+	
+	private ArrayList<String> androidPermissions = new ArrayList<>();
 
 	public ArrayList<String> getIncompatiblePlatforms() {
 		return incompatiblePlatforms;
 	}
 
 	public ArrayList<String> getCoreDependencies() {
-		return core;
+		return coreDependencies;
 	}
 
 	public ArrayList<String> getDesktopDependencies() {
-		return desktop;
+		return desktopDependencies;
 	}
 
 	public ArrayList<String> getGwtDependencies() {
-		return gwt;
+		return gwtDependencies;
 	}
 
 	public ArrayList<String> getAndroidDependencies() {
-		return android;
+		return androidDependencies;
 	}
 
 	public ArrayList<String> getIosDependencies() {
-		return iOS;
+		return iOSDependencies;
 	}
 
 	public ArrayList<String> getGwtInherits() {
 		return gwtInherits;
+	}
+	
+	public ArrayList<String> getAndroidPermissions() {
+		return androidPermissions;
 	}
 
 }

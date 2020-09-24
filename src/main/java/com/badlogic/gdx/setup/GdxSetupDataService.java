@@ -24,8 +24,8 @@ import org.springframework.core.io.Resource;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import com.badlgoic.gdx.setup.jpa.GdxExtensionStateEntity;
 import com.badlgoic.gdx.setup.jpa.GdxExtensionEntity;
+import com.badlgoic.gdx.setup.jpa.GdxExtensionStateEntity;
 import com.badlgoic.gdx.setup.jpa.GdxTemplateFileEntity;
 import com.badlogic.gdx.setup.rest.NotFoundException;
 import com.badlogic.gdx.setup.util.SimpleJSONParser;
@@ -128,7 +128,7 @@ public class GdxSetupDataService {
 			latestDep = extJson.states.get(latestVersion);
 		}
 
-		GdxExtensionEntity ext = new GdxExtensionEntity(extJson.name, extJson.author, extJson.description,
+		GdxExtensionEntity ext = new GdxExtensionEntity(extJson.name, extJson.authors, extJson.description,
 				extJson.projectUrl, stableDep, latestDep);
 
 		return ext;
@@ -208,7 +208,7 @@ public class GdxSetupDataService {
 
 	public class GdxExtensionJson {
 		private String name;
-		private String author;
+		private ArrayList<String> authors;
 		private String description;
 		private String projectUrl;
 
@@ -224,8 +224,8 @@ public class GdxSetupDataService {
 			return name;
 		}
 
-		public String getAuthor() {
-			return author;
+		public ArrayList getAuthors() {
+			return authors;
 		}
 
 		public String getDescription() {
